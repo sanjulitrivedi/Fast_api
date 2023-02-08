@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <style>
+      .create-post-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px;
+      }
+      .create-post-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        border: 1px solid black;
+        border-radius: 10px;
+      }
+      .form-input {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+      }
+      .post-button {
+        margin: 20px;
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+        background-color: lightblue;
+        cursor: pointer;
+      }
+      .post-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px;
+      }
+      .post {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        border: 1px solid black;
+        border-radius: 10px;
+      }
+      .like-button {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+        background-color: lightblue;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="create-post-container">
+      <h2>Create a Post</h2>
+      <form class="create-post-form">
+        <input
+          type="text"
+          class="form-input"
+          id="post-name"
+          placeholder="Post Name"
+        />
+        <input
+          type="text"
+          class="form-input"
+          id="caption"
+          placeholder="Caption"
+        />
+        <button class="post-button" onclick="createPost()">Post</button>
+      </form>
+    </div>
+    <div class="post-container">
+      <h2>Posts</h2>
+      <div class="posts"></div>
+    </div>
+
+    <script>
+      function createPost() {
+    var postName = document.getElementById("post_name").value;
+    var caption = document.getElementById("caption").value;
+    var token = localStorage.getItem("token");
+
+    var data = {
+        "post_name": postName,
+        "caption": caption
+    };
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/create_post", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Authorization", token);
+    xhr.send(JSON.stringify(data));
+
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            var response = JSON.parse(this.responseText);
+            alert(response.message);
+        } else if (this.readyState === XMLHttpRequest.DONE) {
+            alert("Error creating post");
+        }
+    };
+}</script>
+</head>
+
+</html>
